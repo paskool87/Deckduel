@@ -10,6 +10,12 @@ app.get("/api", (req, res) => {
     });
 });
 
+app.get("/api/health", (req, res) => {
+    res.json({
+        status: "OK"
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Serveur DeckDuel démarré sur le port ${PORT}`);
 });
