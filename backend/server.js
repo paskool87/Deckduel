@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const connection = require("./database");
+const usersRoutes = require("./routes/users.routes");
 
 const app = express();
 
@@ -19,19 +20,7 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-app.get("/api/users", (req, res) => {
-    connection.query("SELECT * FROM users", (error, results) => {
-        if (error) {
-            console.error("Erreur SQL :", error.message);
-
-            return res.status(500).json({
-                error: "Erreur lors de la récupération des utilisateurs"
-            });
-        }
-
-        res.json(results);
-    });
-});
+app.use("/api/users", usersRoutes);
 
 app.listen(PORT, () => {
     console.log(`Serveur DeckDuel démarré sur le port ${PORT}`);
