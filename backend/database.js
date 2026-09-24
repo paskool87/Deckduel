@@ -1,4 +1,3 @@
-require("dotenv").config();
 
 const mysql = require("mysql2");
 
@@ -17,15 +16,6 @@ connection.connect((error) => {
     }
 
     console.log("Connexion à MySQL réussie");
-
-    connection.query("SELECT * FROM users", (error, results) => {
-        if (error) {
-            console.error("Erreur SQL :", error.message);
-            return;
-        }
-
-        console.log("Utilisateurs :", results);
-    });
 });
 
 module.exports = connection;
