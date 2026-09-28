@@ -6,6 +6,7 @@ const usersRoutes = require("./routes/users.routes");
 const authRoutes = require("./routes/auth.routes");
 const decksRoutes = require("./routes/decks.routes");
 const cardsRoutes = require("./routes/cards.routes");
+const deckTraitsRoutes = require("./routes/deckTraits.routes");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/api/users", usersRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/decks", decksRoutes);
 app.use("/api", cardsRoutes);
+app.use("/api", deckTraitsRoutes);
 
 app.listen(PORT, () => {
     console.log(`Serveur DeckDuel démarré sur le port ${PORT}`);
