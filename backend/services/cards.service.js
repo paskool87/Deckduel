@@ -6,6 +6,7 @@ const createCard = (
     health,
     attack,
     defense,
+    specialAbilityId,
     callback
 ) => {
     const checkSql = `
@@ -47,7 +48,14 @@ const createCard = (
                 }
 
                 const countSql = `
-                    SELECT COUNT(*) AS cardCount
+                    SELECT
+                        COUNT(*) AS cardCount,
+                        SUM(
+                            CASE
+                                WHEN special_ability_id IS NOT NULL THEN 1
+                                ELSE 0
+                            END
+                        ) AS specialCardCount
                     FROM cards
                     WHERE deck_id = ?
                 `;
@@ -60,9 +68,22 @@ const createCard = (
                             return callback(error);
                         }
 
-                        if (results[0].cardCount >= 20) {
+                        const cardCount = results[0].cardCount;
+                        const specialCardCount =
+                            results[0].specialCardCount || 0;
+
+                        if (cardCount >= 20) {
                             return callback({
                                 code: "DECK_FULL"
+                            });
+                        }
+
+                        if (
+                            specialAbilityId !== null &&
+                            specialCardCount >= 5
+                        ) {
+                            return callback({
+                                code: "SPECIAL_CARDS_FULL"
                             });
                         }
 
@@ -71,14 +92,21 @@ const createCard = (
                                 deck_id,
                                 health,
                                 attack,
-                                defense
+                                defense,
+                                special_ability_id
                             )
-                            VALUES (?, ?, ?, ?)
+                            VALUES (?, ?, ?, ?, ?)
                         `;
 
                         connection.query(
                             sql,
-                            [deckId, health, attack, defense],
+                            [
+                                deckId,
+                                health,
+                                attack,
+                                defense,
+                                specialAbilityId
+                            ],
                             (error, result) => {
                                 if (error) {
                                     return callback(error);
@@ -89,7 +117,8 @@ const createCard = (
                                     deck_id: deckId,
                                     health,
                                     attack,
-                                    defense
+                                    defense,
+                                    special_ability_id: specialAbilityId
                                 });
                             }
                         );

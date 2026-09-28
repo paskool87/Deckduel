@@ -4,7 +4,12 @@ const createCard = (req, res) => {
     const userId = req.user.id_users;
     const deckId = req.params.deckId;
 
-    const { health, attack, defense } = req.body;
+    const {
+        health,
+        attack,
+        defense,
+        special_ability_id
+    } = req.body;
 
     if (
         health === undefined ||
@@ -16,12 +21,18 @@ const createCard = (req, res) => {
         });
     }
 
+    const specialAbilityId =
+        special_ability_id === undefined
+            ? null
+            : special_ability_id;
+
     cardsService.createCard(
         userId,
         deckId,
         health,
         attack,
         defense,
+        specialAbilityId,
         (error, card) => {
             if (error) {
                 console.error(
@@ -44,6 +55,12 @@ const createCard = (req, res) => {
                 if (error.code === "DECK_FULL") {
                     return res.status(409).json({
                         error: "Le deck contient déjà 20 cartes"
+                    });
+                }
+
+                if (error.code === "SPECIAL_CARDS_FULL") {
+                    return res.status(409).json({
+                        error: "Le deck contient déjà 5 cartes avec une capacité spéciale"
                     });
                 }
 
