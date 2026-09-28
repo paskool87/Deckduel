@@ -57,7 +57,31 @@ const createDeck = (userId, name, callback) => {
     });
 };
 
+const getDeckById = (userId, deckId, callback) => {
+    const sql = `
+        SELECT id_decks, user_id, name, created_at
+        FROM decks
+        WHERE id_decks = ?
+        AND user_id = ?
+    `;
+
+    connection.query(sql, [deckId, userId], (error, results) => {
+        if (error) {
+            return callback(error);
+        }
+
+        if (results.length === 0) {
+            return callback({
+                code: "DECK_NOT_FOUND"
+            });
+        }
+
+        callback(null, results[0]);
+    });
+};
+
 module.exports = {
     getDecks,
-    createDeck
+    createDeck,
+    getDeckById
 };
