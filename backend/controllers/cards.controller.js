@@ -162,7 +162,46 @@ const updateCard = (req, res) => {
     );
 };
 
+const deleteCard = (req, res) => {
+    const userId = req.user.id_users;
+    const deckId = req.params.deckId;
+    const cardId = req.params.cardId;
+
+    cardsService.deleteCard(
+        userId,
+        deckId,
+        cardId,
+        (error) => {
+            if (error) {
+                console.error(
+                    "Erreur lors de la suppression de la carte :",
+                    error.message || error.code
+                );
+
+                if (error.code === "DECK_NOT_ALLOWED") {
+                    return res.status(403).json({
+                        error: "Vous n'avez pas accès à ce deck"
+                    });
+                }
+
+                if (error.code === "CARD_NOT_FOUND") {
+                    return res.status(404).json({
+                        error: "Carte introuvable"
+                    });
+                }
+
+                return res.status(500).json({
+                    error: "Erreur lors de la suppression de la carte"
+                });
+            }
+
+            res.status(204).send();
+        }
+    );
+};
+
 module.exports = {
     createCard,
-    updateCard
+    updateCard,
+    deleteCard
 };

@@ -217,7 +217,7 @@ const updateCard = (
             }
 
             const cardSql = `
-                SELECT id_cards, special_ability_id
+                SELECT id_cards
                 FROM cards
                 WHERE id_cards = ?
                 AND deck_id = ?
@@ -236,8 +236,6 @@ const updateCard = (
                             code: "CARD_NOT_FOUND"
                         });
                     }
-
-                    const currentCard = results[0];
 
                     const update = () => {
                         const sql = `
@@ -340,7 +338,79 @@ const updateCard = (
     );
 };
 
+const deleteCard = (
+    userId,
+    deckId,
+    cardId,
+    callback
+) => {
+    const deckSql = `
+        SELECT id_decks
+        FROM decks
+        WHERE id_decks = ?
+        AND user_id = ?
+    `;
+
+    connection.query(
+        deckSql,
+        [deckId, userId],
+        (error, results) => {
+            if (error) {
+                return callback(error);
+            }
+
+            if (results.length === 0) {
+                return callback({
+                    code: "DECK_NOT_ALLOWED"
+                });
+            }
+
+            const cardSql = `
+                SELECT id_cards
+                FROM cards
+                WHERE id_cards = ?
+                AND deck_id = ?
+            `;
+
+            connection.query(
+                cardSql,
+                [cardId, deckId],
+                (error, results) => {
+                    if (error) {
+                        return callback(error);
+                    }
+
+                    if (results.length === 0) {
+                        return callback({
+                            code: "CARD_NOT_FOUND"
+                        });
+                    }
+
+                    const deleteSql = `
+                        DELETE FROM cards
+                        WHERE id_cards = ?
+                        AND deck_id = ?
+                    `;
+
+                    connection.query(
+                        deleteSql,
+                        [cardId, deckId],
+                        (error) => {
+                            if (error) {
+                                return callback(error);
+                            }
+
+                            callback(null);
+                        }
+                    );
+                }
+            );
+        }
+    );
+};
+
 module.exports = {
     createCard,
-    updateCard
+    updateCard,
+    deleteCard
 };

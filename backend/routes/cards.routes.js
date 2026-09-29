@@ -16,4 +16,10 @@ router.put(
     cardsController.updateCard
 );
 
+router.delete(
+    "/decks/:deckId/cards/:cardId",
+    authenticateToken,
+    cardsController.deleteCard
+);
+
 module.exports = router;
