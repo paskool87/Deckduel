@@ -10,4 +10,10 @@ router.post(
     cardsController.createCard
 );
 
+router.put(
+    "/decks/:deckId/cards/:cardId",
+    authenticateToken,
+    cardsController.updateCard
+);
+
 module.exports = router;
