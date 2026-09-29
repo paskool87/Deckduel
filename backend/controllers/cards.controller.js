@@ -57,7 +57,12 @@ const createCard = (req, res) => {
           return res.status(409).json({
             error: "Cette capacité spéciale est déjà utilisée dans le deck",
           });
-          
+        }
+
+        if (error.code === "SPECIAL_ABILITY_NOT_FOUND") {
+          return res.status(404).json({
+            error: "Capacité spéciale introuvable",
+          });
         }
 
         return res.status(500).json({

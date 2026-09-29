@@ -131,28 +131,50 @@ const createCard = (
                 };
 
                 if (specialAbilityId !== null) {
-                    const specialAbilitySql = `
-                        SELECT id_cards
-                        FROM cards
-                        WHERE deck_id = ?
-                        AND special_ability_id = ?
+                    const specialAbilityExistsSql = `
+                        SELECT id_special_abilities
+                        FROM special_abilities
+                        WHERE id_special_abilities = ?
                     `;
 
                     connection.query(
-                        specialAbilitySql,
-                        [deckId, specialAbilityId],
+                        specialAbilityExistsSql,
+                        [specialAbilityId],
                         (error, results) => {
                             if (error) {
                                 return callback(error);
                             }
 
-                            if (results.length > 0) {
+                            if (results.length === 0) {
                                 return callback({
-                                    code: "SPECIAL_ABILITY_ALREADY_USED"
+                                    code: "SPECIAL_ABILITY_NOT_FOUND"
                                 });
                             }
 
-                            checkCardLimits();
+                            const specialAbilitySql = `
+                                SELECT id_cards
+                                FROM cards
+                                WHERE deck_id = ?
+                                AND special_ability_id = ?
+                            `;
+
+                            connection.query(
+                                specialAbilitySql,
+                                [deckId, specialAbilityId],
+                                (error, results) => {
+                                    if (error) {
+                                        return callback(error);
+                                    }
+
+                                    if (results.length > 0) {
+                                        return callback({
+                                            code: "SPECIAL_ABILITY_ALREADY_USED"
+                                        });
+                                    }
+
+                                    checkCardLimits();
+                                }
+                            );
                         }
                     );
                 } else {
