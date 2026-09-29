@@ -29,6 +29,24 @@ const createCard = (req, res) => {
           error.message || error.code,
         );
 
+        if (error.code === "INVALID_HEALTH") {
+          return res.status(400).json({
+            error: "La santé de la carte doit être d'au moins 10",
+          });
+        }
+
+        if (error.code === "INVALID_STAT") {
+          return res.status(400).json({
+            error: "L'attaque et la défense doivent être positives ou nulles",
+          });
+        }
+
+        if (error.code === "INVALID_STATS_TOTAL") {
+          return res.status(400).json({
+            error: "La somme de la santé, de l'attaque et de la défense doit être égale à 100",
+          });
+        }
+
         if (error.code === "DECK_NOT_FOUND") {
           return res.status(404).json({
             error: "Deck introuvable",
@@ -105,6 +123,24 @@ const updateCard = (req, res) => {
           "Erreur lors de la modification de la carte :",
           error.message || error.code,
         );
+
+        if (error.code === "INVALID_HEALTH") {
+          return res.status(400).json({
+            error: "La santé de la carte doit être d'au moins 10",
+          });
+        }
+
+        if (error.code === "INVALID_STAT") {
+          return res.status(400).json({
+            error: "L'attaque et la défense doivent être positives ou nulles",
+          });
+        }
+
+        if (error.code === "INVALID_STATS_TOTAL") {
+          return res.status(400).json({
+            error: "La somme de la santé, de l'attaque et de la défense doit être égale à 100",
+          });
+        }
 
         if (error.code === "DECK_NOT_ALLOWED") {
           return res.status(403).json({

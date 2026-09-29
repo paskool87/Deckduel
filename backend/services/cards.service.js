@@ -9,6 +9,24 @@ const createCard = (
     specialAbilityId,
     callback
 ) => {
+    if (health < 10) {
+        return callback({
+            code: "INVALID_HEALTH"
+        });
+    }
+
+    if (attack < 0 || defense < 0) {
+        return callback({
+            code: "INVALID_STAT"
+        });
+    }
+
+    if (health + attack + defense !== 100) {
+        return callback({
+            code: "INVALID_STATS_TOTAL"
+        });
+    }
+
     const checkSql = `
         SELECT id_decks
         FROM decks
@@ -195,6 +213,24 @@ const updateCard = (
     specialAbilityId,
     callback
 ) => {
+    if (health < 10) {
+        return callback({
+            code: "INVALID_HEALTH"
+        });
+    }
+
+    if (attack < 0 || defense < 0) {
+        return callback({
+            code: "INVALID_STAT"
+        });
+    }
+
+    if (health + attack + defense !== 100) {
+        return callback({
+            code: "INVALID_STATS_TOTAL"
+        });
+    }
+
     const deckSql = `
         SELECT id_decks
         FROM decks
