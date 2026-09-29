@@ -126,8 +126,40 @@ const getDeckById = (userId, deckId, callback) => {
     });
 };
 
+const updateDeck = (userId, deckId, name, callback) => {
+    const sql = `
+        UPDATE decks
+        SET name = ?
+        WHERE id_decks = ?
+        AND user_id = ?
+    `;
+
+    connection.query(
+        sql,
+        [name, deckId, userId],
+        (error, result) => {
+            if (error) {
+                return callback(error);
+            }
+
+            if (result.affectedRows === 0) {
+                return callback({
+                    code: "DECK_NOT_FOUND"
+                });
+            }
+
+            callback(null, {
+                id_decks: Number(deckId),
+                user_id: userId,
+                name
+            });
+        }
+    );
+};
+
 module.exports = {
     getDecks,
     createDeck,
-    getDeckById
+    getDeckById,
+    updateDeck
 };

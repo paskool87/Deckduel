@@ -4,8 +4,28 @@ const authenticateToken = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
-router.get("/", authenticateToken, decksController.getDecks);
-router.post("/", authenticateToken, decksController.createDeck);
-router.get("/:deckId", authenticateToken, decksController.getDeckById);
+router.get(
+    "/",
+    authenticateToken,
+    decksController.getDecks
+);
+
+router.post(
+    "/",
+    authenticateToken,
+    decksController.createDeck
+);
+
+router.get(
+    "/:deckId",
+    authenticateToken,
+    decksController.getDeckById
+);
+
+router.put(
+    "/:deckId",
+    authenticateToken,
+    decksController.updateDeck
+);
 
 module.exports = router;
