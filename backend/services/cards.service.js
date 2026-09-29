@@ -217,7 +217,9 @@ const updateCard = (
             }
 
             const cardSql = `
-                SELECT id_cards
+                SELECT
+                    id_cards,
+                    special_ability_id
                 FROM cards
                 WHERE id_cards = ?
                 AND deck_id = ?
@@ -236,6 +238,8 @@ const updateCard = (
                             code: "CARD_NOT_FOUND"
                         });
                     }
+
+                    const currentCard = results[0];
 
                     const update = () => {
                         const sql = `
@@ -277,61 +281,101 @@ const updateCard = (
                         );
                     };
 
-                    if (specialAbilityId !== null) {
-                        const abilitySql = `
-                            SELECT id_special_abilities
-                            FROM special_abilities
-                            WHERE id_special_abilities = ?
-                        `;
-
-                        connection.query(
-                            abilitySql,
-                            [specialAbilityId],
-                            (error, results) => {
-                                if (error) {
-                                    return callback(error);
-                                }
-
-                                if (results.length === 0) {
-                                    return callback({
-                                        code: "SPECIAL_ABILITY_NOT_FOUND"
-                                    });
-                                }
-
-                                const duplicateSql = `
-                                    SELECT id_cards
-                                    FROM cards
-                                    WHERE deck_id = ?
-                                    AND special_ability_id = ?
-                                    AND id_cards != ?
-                                `;
-
-                                connection.query(
-                                    duplicateSql,
-                                    [
-                                        deckId,
-                                        specialAbilityId,
-                                        cardId
-                                    ],
-                                    (error, results) => {
-                                        if (error) {
-                                            return callback(error);
-                                        }
-
-                                        if (results.length > 0) {
-                                            return callback({
-                                                code: "SPECIAL_ABILITY_ALREADY_USED"
-                                            });
-                                        }
-
-                                        update();
-                                    }
-                                );
-                            }
-                        );
-                    } else {
-                        update();
+                    if (specialAbilityId === null) {
+                        return update();
                     }
+
+                    const abilitySql = `
+                        SELECT id_special_abilities
+                        FROM special_abilities
+                        WHERE id_special_abilities = ?
+                    `;
+
+                    connection.query(
+                        abilitySql,
+                        [specialAbilityId],
+                        (error, results) => {
+                            if (error) {
+                                return callback(error);
+                            }
+
+                            if (results.length === 0) {
+                                return callback({
+                                    code: "SPECIAL_ABILITY_NOT_FOUND"
+                                });
+                            }
+
+                            const duplicateSql = `
+                                SELECT id_cards
+                                FROM cards
+                                WHERE deck_id = ?
+                                AND special_ability_id = ?
+                                AND id_cards != ?
+                            `;
+
+                            connection.query(
+                                duplicateSql,
+                                [
+                                    deckId,
+                                    specialAbilityId,
+                                    cardId
+                                ],
+                                (error, results) => {
+                                    if (error) {
+                                        return callback(error);
+                                    }
+
+                                    if (results.length > 0) {
+                                        return callback({
+                                            code: "SPECIAL_ABILITY_ALREADY_USED"
+                                        });
+                                    }
+
+                                    if (
+                                        currentCard.special_ability_id ===
+                                        null
+                                    ) {
+                                        const countSql = `
+                                            SELECT COUNT(*) AS specialCardCount
+                                            FROM cards
+                                            WHERE deck_id = ?
+                                            AND special_ability_id IS NOT NULL
+                                        `;
+
+                                        connection.query(
+                                            countSql,
+                                            [deckId],
+                                            (error, results) => {
+                                                if (error) {
+                                                    return callback(error);
+                                                }
+
+                                                const specialCardCount =
+                                                    Number(
+                                                        results[0]
+                                                            .specialCardCount
+                                                    );
+
+                                                if (
+                                                    specialCardCount >= 5
+                                                ) {
+                                                    return callback({
+                                                        code: "SPECIAL_CARDS_FULL"
+                                                    });
+                                                }
+
+                                                update();
+                                            }
+                                        );
+
+                                        return;
+                                    }
+
+                                    update();
+                                }
+                            );
+                        }
+                    );
                 }
             );
         }
