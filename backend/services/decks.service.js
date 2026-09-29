@@ -157,9 +157,36 @@ const updateDeck = (userId, deckId, name, callback) => {
     );
 };
 
+const deleteDeck = (userId, deckId, callback) => {
+    const sql = `
+        DELETE FROM decks
+        WHERE id_decks = ?
+        AND user_id = ?
+    `;
+
+    connection.query(
+        sql,
+        [deckId, userId],
+        (error, result) => {
+            if (error) {
+                return callback(error);
+            }
+
+            if (result.affectedRows === 0) {
+                return callback({
+                    code: "DECK_NOT_FOUND"
+                });
+            }
+
+            callback(null);
+        }
+    );
+};
+
 module.exports = {
     getDecks,
     createDeck,
     getDeckById,
-    updateDeck
+    updateDeck,
+    deleteDeck
 };

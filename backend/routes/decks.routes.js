@@ -28,4 +28,10 @@ router.put(
     decksController.updateDeck
 );
 
+router.delete(
+    "/:deckId",
+    authenticateToken,
+    decksController.deleteDeck
+);
+
 module.exports = router;

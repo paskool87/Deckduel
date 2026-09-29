@@ -115,9 +115,40 @@ const updateDeck = (req, res) => {
     );
 };
 
+const deleteDeck = (req, res) => {
+    const userId = req.user.id_users;
+    const deckId = req.params.deckId;
+
+    decksService.deleteDeck(
+        userId,
+        deckId,
+        (error) => {
+            if (error) {
+                console.error(
+                    "Erreur lors de la suppression du deck :",
+                    error.message || error.code
+                );
+
+                if (error.code === "DECK_NOT_FOUND") {
+                    return res.status(404).json({
+                        error: "Deck introuvable"
+                    });
+                }
+
+                return res.status(500).json({
+                    error: "Erreur lors de la suppression du deck"
+                });
+            }
+
+            res.status(204).send();
+        }
+    );
+};
+
 module.exports = {
   getDecks,
   createDeck,
   getDeckById,
-  updateDeck
+  updateDeck,
+  deleteDeck
 };
