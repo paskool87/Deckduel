@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const connection = require("./database");
+
 const usersRoutes = require("./routes/users.routes");
 const authRoutes = require("./routes/auth.routes");
 const decksRoutes = require("./routes/decks.routes");
@@ -9,11 +10,15 @@ const cardsRoutes = require("./routes/cards.routes");
 const deckTraitsRoutes = require("./routes/deckTraits.routes");
 const specialAbilitiesRoutes = require("./routes/specialAbilities.routes");
 
+const { swaggerUi, swaggerDocument } = require("./swagger");
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/api", (req, res) => {
     res.json({
