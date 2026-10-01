@@ -10,4 +10,16 @@ router.post(
     deckTraitsController.addTraitToDeck
 );
 
+router.put(
+    "/decks/:deckId/traits/:traitId",
+    authenticateToken,
+    deckTraitsController.updateTrait
+);
+
+router.delete(
+    "/decks/:deckId/traits/:traitId",
+    authenticateToken,
+    deckTraitsController.deleteTrait
+);
+
 module.exports = router;

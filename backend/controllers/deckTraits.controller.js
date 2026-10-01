@@ -76,6 +76,105 @@ const addTraitToDeck = (req, res) => {
     );
 };
 
+const updateTrait = (req, res) => {
+    const userId = req.user.id_users;
+    const deckId = req.params.deckId;
+    const traitId = req.params.traitId;
+
+    const { intensity } = req.body;
+
+    if (intensity === undefined) {
+        return res.status(400).json({
+            error: "L'intensité est obligatoire"
+        });
+    }
+
+    deckTraitsService.updateTrait(
+        userId,
+        deckId,
+        traitId,
+        intensity,
+        (error, deckTrait) => {
+            if (error) {
+                console.error(
+                    "Erreur lors de la modification du trait :",
+                    error.message || error.code
+                );
+
+                if (error.code === "INVALID_INTENSITY") {
+                    return res.status(400).json({
+                        error: "L'intensité doit être comprise entre 1 et 7"
+                    });
+                }
+
+                if (error.code === "DECK_NOT_ALLOWED") {
+                    return res.status(403).json({
+                        error: "Vous n'avez pas accès à ce deck"
+                    });
+                }
+
+                if (error.code === "TRAIT_NOT_FOUND") {
+                    return res.status(404).json({
+                        error: "Trait introuvable dans ce deck"
+                    });
+                }
+
+                if (error.code === "INTENSITY_LIMIT") {
+                    return res.status(409).json({
+                        error: "Le total des intensités ne peut pas dépasser 9"
+                    });
+                }
+
+                return res.status(500).json({
+                    error: "Erreur lors de la modification du trait"
+                });
+            }
+
+            res.json(deckTrait);
+        }
+    );
+};
+
+const deleteTrait = (req, res) => {
+    const userId = req.user.id_users;
+    const deckId = req.params.deckId;
+    const traitId = req.params.traitId;
+
+    deckTraitsService.deleteTrait(
+        userId,
+        deckId,
+        traitId,
+        (error) => {
+            if (error) {
+                console.error(
+                    "Erreur lors de la suppression du trait :",
+                    error.message || error.code
+                );
+
+                if (error.code === "DECK_NOT_ALLOWED") {
+                    return res.status(403).json({
+                        error: "Vous n'avez pas accès à ce deck"
+                    });
+                }
+
+                if (error.code === "TRAIT_NOT_FOUND") {
+                    return res.status(404).json({
+                        error: "Trait introuvable dans ce deck"
+                    });
+                }
+
+                return res.status(500).json({
+                    error: "Erreur lors de la suppression du trait"
+                });
+            }
+
+            res.status(204).send();
+        }
+    );
+};
+
 module.exports = {
-    addTraitToDeck
+    addTraitToDeck,
+    updateTrait,
+    deleteTrait
 };
