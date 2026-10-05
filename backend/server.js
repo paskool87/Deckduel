@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const connection = require("./database");
+const cors = require('cors')
 
 const usersRoutes = require("./routes/users.routes");
 const authRoutes = require("./routes/auth.routes");
@@ -18,6 +19,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+app.use(cors());
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/api", (req, res) => {
@@ -31,6 +34,7 @@ app.get("/api/health", (req, res) => {
         status: "OK"
     });
 });
+
 
 app.use("/api/users", usersRoutes);
 app.use("/api/auth", authRoutes);
