@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../services/auth";
+import { setToken, setUser } from "../../services/storage";
 import "./Login.scss";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   async function handleSubmit(event) {
@@ -17,8 +19,10 @@ function Login() {
     try {
       const data = await login(email, password);
 
-      localStorage.setItem("token", data.token);
+      setToken(data.token);
 
+      setUser(data.user);
+      
       navigate("/dashboard");
     } catch (error) {
       setError(error.message);
