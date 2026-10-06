@@ -1,69 +1,69 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
-import { login } from "../../services/auth"
-import "./Login.scss"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../../services/auth";
+import "./Login.scss";
 
 function Login() {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [error, setError] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-    async function handleSubmit(event) {
-        event.preventDefault()
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-        setError("")
+    setError("");
 
-        try {
-            const data = await login(email, password)
+    try {
+      const data = await login(email, password);
 
-            console.log(data)
-        } catch (error) {
-            setError(error.message)
-        }
+      localStorage.setItem("token", data.token);
+
+      navigate("/dashboard");
+    } catch (error) {
+      setError(error.message);
     }
+  }
 
-    return (
-        <section className="login">
-            <h1>Connexion</h1>
+  return (
+    <section className="login">
+      <h1>Connexion</h1>
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        required
-                    />
-                </div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
+        </div>
 
-                <div>
-                    <label htmlFor="password">Mot de passe</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        required
-                    />
-                </div>
+        <div>
+          <label htmlFor="password">Mot de passe</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+        </div>
 
-                {error && <p>{error}</p>}
+        {error && <p>{error}</p>}
 
-                <button type="submit">
-                    Se connecter
-                </button>
-            </form>
+        <button type="submit">Se connecter</button>
+      </form>
 
-            <p>
-                Pas encore de compte ?{" "}
-                <Link to="/register">Créer un compte</Link>
-            </p>
-        </section>
-    )
+      <p>
+        Pas encore de compte ? <Link to="/register">Créer un compte</Link>
+      </p>
+    </section>
+  );
 }
 
-export default Login
+export default Login;
