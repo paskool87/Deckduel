@@ -14,7 +14,7 @@ export async function addTrait(deckId, traitId, intensity) {
                 Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
-                traitId,
+                trait_id:traitId,
                 intensity
             })
         }

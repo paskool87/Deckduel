@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { getDecks } from "../../services/decks"
+import { Link } from "react-router-dom"
+import { getDecks, getDeckById } from "../../services/decks"
 import "./Dashboard.scss"
 
 function Dashboard() {
@@ -12,7 +13,13 @@ function Dashboard() {
             try {
                 const data = await getDecks()
 
-                setDecks(data)
+                const completeDecks = await Promise.all(
+                    data.map((deck) =>
+                        getDeckById(deck.id_decks)
+                    )
+                )
+
+                setDecks(completeDecks)
             } catch (error) {
                 setError(error.message)
             } finally {
@@ -33,18 +40,74 @@ function Dashboard() {
 
             {!loading && !error && (
                 <>
+                    <h2>Mes decks</h2>
+
                     {decks.length === 0 ? (
                         <p>Vous n'avez pas encore de deck.</p>
                     ) : (
-                        <>
-                            <h2>Mes decks</h2>
+                        <div className="dashboard__decks">
+                            {decks.map((deck) => {
+                                const cardCount =
+                                    deck.cards?.length || 0
 
-                            {decks.map((deck) => (
-                                <div key={deck.id_decks}>
-                                    <p>{deck.name}</p>
-                                </div>
-                            ))}
-                        </>
+                                const traitCount =
+                                    deck.traits?.length || 0
+
+                                const hasEnoughCards =
+                                    cardCount === 20
+
+                                const hasEnoughTraits =
+                                    traitCount === 3
+
+                                const deckReady =
+                                    hasEnoughCards &&
+                                    hasEnoughTraits
+
+                                return (
+                                    <article
+                                        className="dashboard__deck"
+                                        key={deck.id_decks}
+                                    >
+                                        <h3>{deck.name}</h3>
+
+                                        <div className="dashboard__actions">
+                                            <Link to="/deck/cards">
+                                                Mes cartes
+                                            </Link>
+
+                                            <Link to="/deck/traits">
+                                                Mes traits
+                                            </Link>
+                                        </div>
+
+                                        {!deckReady && (
+                                            <div className="dashboard__missing">
+                                                {!hasEnoughCards && (
+                                                    <p>
+                                                        Cartes non choisies
+                                                    </p>
+                                                )}
+
+                                                {!hasEnoughTraits && (
+                                                    <p>
+                                                        Traits non choisis
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {deckReady && (
+                                            <Link
+                                                className="dashboard__duel"
+                                                to="/duel"
+                                            >
+                                                Lancer un duel avec ce deck
+                                            </Link>
+                                        )}
+                                    </article>
+                                )
+                            })}
+                        </div>
                     )}
                 </>
             )}
