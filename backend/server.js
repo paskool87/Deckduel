@@ -10,6 +10,7 @@ const decksRoutes = require("./routes/decks.routes");
 const cardsRoutes = require("./routes/cards.routes");
 const deckTraitsRoutes = require("./routes/deckTraits.routes");
 const specialAbilitiesRoutes = require("./routes/specialAbilities.routes");
+const traitsRoutes = require("./routes/traits.routes");
 
 const { swaggerUi, swaggerDocument } = require("./swagger");
 
@@ -42,6 +43,7 @@ app.use("/api/decks", decksRoutes);
 app.use("/api", cardsRoutes);
 app.use("/api", deckTraitsRoutes);
 app.use("/api/special-abilities", specialAbilitiesRoutes);
+app.use("/api/traits", traitsRoutes);
 
 app.listen(PORT, () => {
     console.log(`Serveur DeckDuel démarré sur le port ${PORT}`);

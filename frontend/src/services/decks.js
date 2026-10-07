@@ -46,3 +46,23 @@ export async function createDeck(name) {
 
     return data
 }
+
+export async function getDeckById(deckId) {
+    const token = getToken()
+
+    const response = await fetch(`${API_URL}/api/decks/${deckId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.error || "Erreur lors de la récupération du deck"
+        )
+    }
+
+    return data
+}
