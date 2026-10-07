@@ -14,6 +14,7 @@ import Duel from "./pages/Duel/Duel"
 import Result from "./pages/Result/Result"
 import Profile from "./pages/Profile/Profile"
 import NotFound from "./pages/NotFound/NotFound"
+import Card from "./pages/Card/Card"
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/deck" element={<Deck />} />
                     <Route path="/deck/cards" element={<DeckCards />} />
+                    <Route path="/card/:cardId" element={<Card />} />
                     <Route path="/deck/traits" element={<DeckTraits />} />
                     <Route path="/deck/abilities" element={<DeckAbilities />} />
                     <Route path="/duel" element={<Duel />} />

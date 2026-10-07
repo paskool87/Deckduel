@@ -15,7 +15,32 @@ export async function getDecks() {
 
     if (!response.ok) {
         throw new Error(
-            data.message || "Erreur lors de la récupération des decks"
+            data.error || "Erreur lors de la récupération des decks"
+        )
+    }
+
+    return data
+}
+
+export async function createDeck(name) {
+    const token = getToken()
+
+    const response = await fetch(`${API_URL}/api/decks`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            name
+        })
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.error || "Erreur lors de la création du deck"
         )
     }
 
