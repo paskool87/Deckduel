@@ -71,11 +71,15 @@ function Dashboard() {
                                         <h3>{deck.name}</h3>
 
                                         <div className="dashboard__actions">
-                                            <Link to="/deck/cards">
+                                            <Link
+                                                to={`/decks/${deck.id_decks}/cards`}
+                                            >
                                                 Mes cartes
                                             </Link>
 
-                                            <Link to="/deck/traits">
+                                            <Link
+                                                to={`/decks/${deck.id_decks}/traits`}
+                                            >
                                                 Mes traits
                                             </Link>
                                         </div>

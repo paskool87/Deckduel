@@ -15,7 +15,8 @@ export async function getDecks() {
 
     if (!response.ok) {
         throw new Error(
-            data.error || "Erreur lors de la récupération des decks"
+            data.error ||
+            "Erreur lors de la récupération des decks"
         )
     }
 
@@ -31,16 +32,15 @@ export async function createDeck(name) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({
-            name
-        })
+        body: JSON.stringify({ name })
     })
 
     const data = await response.json()
 
     if (!response.ok) {
         throw new Error(
-            data.error || "Erreur lors de la création du deck"
+            data.error ||
+            "Erreur lors de la création du deck"
         )
     }
 
@@ -50,17 +50,48 @@ export async function createDeck(name) {
 export async function getDeckById(deckId) {
     const token = getToken()
 
-    const response = await fetch(`${API_URL}/api/decks/${deckId}`, {
-        headers: {
-            Authorization: `Bearer ${token}`
+    const response = await fetch(
+        `${API_URL}/api/decks/${deckId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         }
-    })
+    )
 
     const data = await response.json()
 
     if (!response.ok) {
         throw new Error(
-            data.error || "Erreur lors de la récupération du deck"
+            data.error ||
+            "Erreur lors de la récupération du deck"
+        )
+    }
+
+    return data
+}
+
+export async function updateDeck(deckId, name) {
+    const token = getToken()
+
+    const response = await fetch(
+        `${API_URL}/api/decks/${deckId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ name })
+        }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.error ||
+            "Erreur lors de la modification du deck"
         )
     }
 

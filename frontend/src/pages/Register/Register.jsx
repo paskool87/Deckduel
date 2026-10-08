@@ -9,19 +9,36 @@ function Register() {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [passwordConfirmation, setPasswordConfirmation] = useState("")
     const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
 
     async function handleSubmit(event) {
         event.preventDefault()
 
         setError("")
 
+        if (password !== passwordConfirmation) {
+            setError(
+                "Les mots de passe ne correspondent pas."
+            )
+            return
+        }
+
+        setLoading(true)
+
         try {
-            await register(username, email, password)
+            await register(
+                username,
+                email,
+                password
+            )
 
             navigate("/login")
         } catch (error) {
             setError(error.message)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -31,51 +48,100 @@ function Register() {
 
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="username">Nom d'utilisateur</label>
+                    <label htmlFor="username">
+                        Nom d'utilisateur
+                    </label>
+
                     <input
                         type="text"
                         id="username"
                         name="username"
                         value={username}
-                        onChange={(event) => setUsername(event.target.value)}
+                        onChange={(event) =>
+                            setUsername(event.target.value)
+                        }
                         required
+                        disabled={loading}
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">
+                        Email
+                    </label>
+
                     <input
                         type="email"
                         id="email"
                         name="email"
                         value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        onChange={(event) =>
+                            setEmail(event.target.value)
+                        }
                         required
+                        disabled={loading}
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="password">Mot de passe</label>
+                    <label htmlFor="password">
+                        Mot de passe
+                    </label>
+
                     <input
                         type="password"
                         id="password"
                         name="password"
                         value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        onChange={(event) =>
+                            setPassword(event.target.value)
+                        }
                         required
+                        disabled={loading}
                     />
                 </div>
 
-                {error && <p>{error}</p>}
+                <div>
+                    <label htmlFor="passwordConfirmation">
+                        Confirmation du mot de passe
+                    </label>
 
-                <button type="submit">
-                    Créer mon compte
+                    <input
+                        type="password"
+                        id="passwordConfirmation"
+                        name="passwordConfirmation"
+                        value={passwordConfirmation}
+                        onChange={(event) =>
+                            setPasswordConfirmation(
+                                event.target.value
+                            )
+                        }
+                        required
+                        disabled={loading}
+                    />
+                </div>
+
+                {error && (
+                    <p className="register__error">
+                        {error}
+                    </p>
+                )}
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                >
+                    {loading
+                        ? "Création du compte..."
+                        : "Créer mon compte"}
                 </button>
             </form>
 
-            <p>
+            <p className="register__login">
                 Déjà un compte ?{" "}
-                <Link to="/login">Se connecter</Link>
+                <Link to="/login">
+                    Se connecter
+                </Link>
             </p>
         </section>
     )

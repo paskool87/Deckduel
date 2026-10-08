@@ -7,7 +7,8 @@ function Home() {
             <h1>DeckDuel</h1>
 
             <p>
-                Crée ton deck et affronte tes adversaires.
+                Crée ton deck, personnalise tes cartes
+                et affronte tes adversaires.
             </p>
 
             <div className="home__actions">

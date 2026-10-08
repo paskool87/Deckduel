@@ -6,15 +6,13 @@ import Home from "./pages/Home/Home"
 import Login from "./pages/Login/Login"
 import Register from "./pages/Register/Register"
 import Dashboard from "./pages/Dashboard/Dashboard"
-import Deck from "./pages/Deck/Deck"
 import DeckCards from "./pages/DeckCards/DeckCards"
 import DeckTraits from "./pages/DeckTraits/DeckTraits"
-import DeckAbilities from "./pages/DeckAbilities/DeckAbilities"
 import Duel from "./pages/Duel/Duel"
 import Result from "./pages/Result/Result"
 import Profile from "./pages/Profile/Profile"
 import NotFound from "./pages/NotFound/NotFound"
-import Card from "./pages/Card/Card"
+import CardEdit from "./pages/CardEdit/CardEdit"
 
 function App() {
     return (
@@ -25,14 +23,26 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/deck" element={<Deck />} />
-                    <Route path="/deck/cards" element={<DeckCards />} />
-                    <Route path="/card/:cardId" element={<Card />} />
-                    <Route path="/deck/traits" element={<DeckTraits />} />
-                    <Route path="/deck/abilities" element={<DeckAbilities />} />
+
+                    <Route
+                        path="/decks/:deckId/cards"
+                        element={<DeckCards />}
+                    />
+
+                    <Route
+                        path="/decks/:deckId/cards/:cardId"
+                        element={<CardEdit />}
+                    />
+
+                    <Route
+                        path="/decks/:deckId/traits"
+                        element={<DeckTraits />}
+                    />
+
                     <Route path="/duel" element={<Duel />} />
-                    <Route path="/result" element={<Result />} />
+                    <Route path="/result/:duelId" element={<Result />} />
                     <Route path="/profile" element={<Profile />} />
+
                     <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>

@@ -1,14 +1,16 @@
+@use "./variables" as *;
+
 :root {
-  font-family: Arial, sans-serif;
-  color: #ffffff;
-  background-color: #1a1a1a;
+    font-family: Arial, sans-serif;
+    color: $color-text;
+    background-color: $color-background;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
+    margin: 0;
+    min-width: 320px;
 }

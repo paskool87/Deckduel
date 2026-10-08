@@ -1,0 +1,36 @@
+@use "../../styles/variables" as *;
+
+.home {
+    padding: 60px 20px;
+    text-align: center;
+
+    h1 {
+        margin-bottom: $spacing-medium;
+        font-size: 48px;
+    }
+
+    p {
+        margin-bottom: $spacing-large;
+        color: $color-text-secondary;
+        font-size: 18px;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: center;
+        gap: $spacing-medium;
+
+        a {
+            padding: 12px 24px;
+            border: 1px solid $color-text;
+            border-radius: $border-radius;
+            color: $color-text;
+            text-decoration: none;
+
+            &:hover {
+                background-color: $color-primary;
+                color: $color-primary-text;
+            }
+        }
+    }
+}
