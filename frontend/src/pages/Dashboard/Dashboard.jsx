@@ -47,21 +47,33 @@ function Dashboard() {
                     ) : (
                         <div className="dashboard__decks">
                             {decks.map((deck) => {
-                                const cardCount =
-                                    deck.cards?.length || 0
-
                                 const traitCount =
                                     deck.traits?.length || 0
 
-                                const hasEnoughCards =
-                                    cardCount === 20
+                                const abilityIds =
+                                    deck.cards
+                                        ?.map(
+                                            (card) =>
+                                                card.special_ability_id
+                                        )
+                                        .filter(
+                                            (abilityId) =>
+                                                abilityId !== null &&
+                                                abilityId !== undefined
+                                        ) || []
+
+                                const abilityCount =
+                                    new Set(abilityIds).size
 
                                 const hasEnoughTraits =
                                     traitCount === 3
 
+                                const hasEnoughAbilities =
+                                    abilityCount === 5
+
                                 const deckReady =
-                                    hasEnoughCards &&
-                                    hasEnoughTraits
+                                    hasEnoughTraits &&
+                                    hasEnoughAbilities
 
                                 return (
                                     <article
@@ -86,15 +98,15 @@ function Dashboard() {
 
                                         {!deckReady && (
                                             <div className="dashboard__missing">
-                                                {!hasEnoughCards && (
-                                                    <p>
-                                                        Cartes non choisies
-                                                    </p>
-                                                )}
-
                                                 {!hasEnoughTraits && (
                                                     <p>
                                                         Traits non choisis
+                                                    </p>
+                                                )}
+
+                                                {!hasEnoughAbilities && (
+                                                    <p>
+                                                        Capacités non choisies
                                                     </p>
                                                 )}
                                             </div>

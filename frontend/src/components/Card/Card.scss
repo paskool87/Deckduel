@@ -1,0 +1,42 @@
+@use "../../styles/variables" as *;
+
+.card {
+    padding: $spacing-medium;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    background-color: $color-surface;
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: $spacing-medium;
+    }
+
+    &__stats {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-small;
+
+        p {
+            display: flex;
+            justify-content: space-between;
+            margin: 0;
+        }
+
+        span {
+            color: $color-text-secondary;
+        }
+    }
+
+    &__ability {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-small;
+        margin-top: $spacing-medium;
+        padding-top: $spacing-medium;
+        border-top: 1px solid $color-border;
+
+        span {
+            color: $color-text-secondary;
+        }
+    }
+}

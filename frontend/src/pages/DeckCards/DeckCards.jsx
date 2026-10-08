@@ -1,10 +1,34 @@
-import { useContext } from "react"
-import { DeckContext } from "../../context/DeckContext"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { getDeckById } from "../../services/decks"
 import CardList from "../../components/CardList/CardList"
 import "./DeckCards.scss"
 
 function DeckCards() {
-    const { currentDeck, loading, error } = useContext(DeckContext)
+    const { deckId } = useParams()
+
+    const [currentDeck, setCurrentDeck] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState("")
+
+    useEffect(() => {
+        async function loadDeck() {
+            try {
+                setLoading(true)
+                setError("")
+
+                const deck = await getDeckById(deckId)
+
+                setCurrentDeck(deck)
+            } catch (error) {
+                setError(error.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        loadDeck()
+    }, [deckId])
 
     if (loading) {
         return (
@@ -34,7 +58,10 @@ function DeckCards() {
         <section className="deck-cards">
             <h1>Mes cartes</h1>
 
-            <CardList cards={currentDeck.cards || []} />
+            <CardList
+                cards={currentDeck.cards || []}
+                deckId={deckId}
+            />
         </section>
     )
 }

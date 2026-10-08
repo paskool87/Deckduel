@@ -390,6 +390,7 @@ const swaggerDocument = {
                   id_users: 1,
                   username: "Pascal",
                   email: "pascal@test.fr",
+                  id_decks: 2,
                 },
               },
             },
