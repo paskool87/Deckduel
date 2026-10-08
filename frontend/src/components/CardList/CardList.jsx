@@ -1,17 +1,14 @@
-import { Link } from "react-router-dom"
+import Card from "../Card/Card"
 import "./CardList.scss"
 
 function CardList({ cards }) {
     return (
         <div className="card-list">
             {cards.map((card) => (
-                <Link
-                    key={card.id}
-                    to={`/card/${card.id}`}
-                    className="card-list__card"
-                >
-                    <span>Carte {card.id}</span>
-                </Link>
+                <Card
+                    key={card.id_cards}
+                    card={card}
+                />
             ))}
         </div>
     )
