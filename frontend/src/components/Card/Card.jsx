@@ -1,6 +1,6 @@
 import "./Card.scss"
 
-function Card({ card, number }) {
+function Card({ card, number, abilityName }) {
     return (
         <article className="card">
             <h2>Carte {number}</h2>
@@ -27,7 +27,7 @@ function Card({ card, number }) {
 
                 <strong>
                     {card.special_ability_id
-                        ? `Capacité ${card.special_ability_id}`
+                        ? abilityName || "Capacité inconnue"
                         : "Aucune"}
                 </strong>
             </div>

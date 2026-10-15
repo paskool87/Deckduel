@@ -1,0 +1,48 @@
+.deck-cards__summary {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    h2 {
+        margin-top: 0;
+    }
+}
+
+.deck-cards__summary-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.4rem 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #e5e7eb;
+
+    strong {
+        text-align: right;
+    }
+
+    span:last-child {
+        grid-column: 1 / -1;
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+}
+
+.deck-cards__status {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 6px;
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+.deck-cards__status--playable {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.deck-cards__status--incomplete {
+    background-color: #fef3c7;
+    color: #92400e;
+}
